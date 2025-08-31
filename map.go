@@ -5,7 +5,7 @@ import (
 )
 
 // Map is a generic wrapper for sync.Map. K and V must implement comparable (see CompareAndDelete and CompareAndSwap).
-type Map[K comparable, V comparable] struct {
+type Map[K any, V any] struct {
 	m sync.Map
 }
 
@@ -14,12 +14,14 @@ func (gm *Map[K, V]) Clear() {
 	gm.m.Clear()
 }
 
-// CompareAndDelete deletes the entry for a key if its value is equal to the old value.
+// CompareAndDelete deletes the entry for a key if its value is equal to the old value. The old value must be of a
+// comparable type.
 func (gm *Map[K, V]) CompareAndDelete(key K, old V) (deleted bool) {
 	return gm.m.CompareAndDelete(key, old)
 }
 
-// CompareAndSwap swaps the old and new values for a key if the value stored in the map is equal to the old value.
+// CompareAndSwap swaps the old and new values for a key if the value stored in the map is equal to the old value. The
+// old value must be of a comparable type.
 func (gm *Map[K, V]) CompareAndSwap(key K, old, new V) (swapped bool) {
 	return gm.m.CompareAndSwap(key, old, new)
 }
